@@ -113,5 +113,25 @@ namespace BitmapToCode
                 throw new NotSupportedException();
             }
         }
+
+        private void ShowHelp(object sender, RoutedEventArgs e)
+        {
+            var builder = new StringBuilder();
+            builder.AppendLine("BitmapToCode Help");
+            builder.AppendLine();
+            builder.AppendLine("Pre-defined JavaScript functions:");
+            builder.AppendLine("  print(string): Outputs text to the console on the right.");
+            builder.AppendLine("  println(string): Outputs text to the console on the right, automatically append newline.");
+            builder.AppendLine("  getRows(): Returns the configured number of rows on the grid.");
+            builder.AppendLine("  getColumns(): Returns the configured number of columns on the grid.");
+            builder.AppendLine("  setRows(int): Sets the number of rows on the grid.");
+            builder.AppendLine("  setColumns(int): Sets the number of columns on the grid.");
+            builder.AppendLine("  invertAll(): Inverts all of the pixels on the grid.");
+            builder.AppendLine("  clearAll(): Clears all of the pixels on the grid.");
+            builder.AppendLine("  isFilled(int, int): Returns true or false indicating whether the cell at the given x, y coordinate is filled.");
+            builder.AppendLine("  setFilled(int, int, bool): Sets the fill of the the cell at the given x, y coordinate to the given state.");
+
+            MessageBox.Show(builder.ToString(), "Help");
+        }
     }
 }

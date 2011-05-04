@@ -69,12 +69,18 @@
             </Grid.ColumnDefinitions>
             <DockPanel>
                 <TextBlock Text="Code" DockPanel.Dock="Top"/>
-                <Button
-                    Content="Execute"
-                    Click="ExecuteScript"
-                    DockPanel.Dock="Bottom"
-                    Margin="3"
-                    HorizontalAlignment="Right"/>
+                <DockPanel Width="{Binding ElementName=textBoxCode, Path=ActualWidth}" DockPanel.Dock="Bottom" LastChildFill="False">
+                    <Button
+                        Content="Execute"
+                        Click="ExecuteScript"
+                        DockPanel.Dock="Right"
+                        Margin="3"/>
+                    <Button
+                        Content="Help"
+                        Click="ShowHelp"
+                        DockPanel.Dock="Left"
+                        Margin="3"/>
+                </DockPanel>
                 <TextBox
                     x:Name="textBoxCode"
                     KeyDown="CodeKeyDown"
