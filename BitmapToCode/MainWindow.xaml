@@ -3,9 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xtoolkit="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended"
         xmlns:local="clr-namespace:BitmapToCode"
-        Title="Bitmap to Code" Height="350" Width="550">
-    <DockPanel>
-        <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom">
+        Title="Bitmap to Code" Height="450" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*" MinHeight="25"/>
+            <RowDefinition Height="3"/>
+            <RowDefinition Height="2*" MinHeight="25"/>
+            <RowDefinition Height="3"/>
+            <RowDefinition Height="4*" MinHeight="25"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <local:CellCollection
+                x:Name="cellCollection" x:FieldModifier="private"
+                NumRows="{Binding ElementName=nudRows, Path=Value, Converter={x:Static local:MainWindow.NullableIntToUintConverter}}"
+                NumColumns="{Binding ElementName=nudColumns, Path=Value, Converter={x:Static local:MainWindow.NullableIntToUintConverter}}"
+                CellDimension="{Binding ElementName=nudCellWidth, Path=Value, Converter={x:Static local:MainWindow.NullableIntToUintConverter}}"
+                />
+        </ScrollViewer>
+        <GridSplitter
+            Grid.Row="1"
+            Width="Auto"
+            Height="3"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Stretch"/>
+        <StackPanel Orientation="Vertical" Grid.Row="2">
             <WrapPanel Orientation="Horizontal">
                 <Label Content="Rows: "/>
                 <xtoolkit:IntegerUpDown
@@ -22,17 +43,60 @@
                 <Label Content="Cell length: "/>
                 <xtoolkit:IntegerUpDown
                     x:Name="nudCellWidth" x:FieldModifier="private"
-                    Value="8"
+                    Value="7"
                     Minimum="2" Maximum="250"/>
             </WrapPanel>
+            <WrapPanel Orientation="Horizontal">
+                <Button Content="Clear All" Margin="10,2" Command="{Binding ElementName=cellCollection, Path=ClearCommand}"/>
+                <Button Content="Invert All" Margin="10,2" Command="{Binding ElementName=cellCollection, Path=InvertCommand}"/>
+            </WrapPanel>
         </StackPanel>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <local:CellCollection
-                x:Name="cellCollection" x:FieldModifier="private"
-                NumRows="{Binding ElementName=nudRows, Path=Value, Converter={x:Static local:MainWindow.NullableIntToUintConverter}}"
-                NumColumns="{Binding ElementName=nudColumns, Path=Value, Converter={x:Static local:MainWindow.NullableIntToUintConverter}}"
-                CellDimension="{Binding ElementName=nudCellWidth, Path=Value, Converter={x:Static local:MainWindow.NullableIntToUintConverter}}"
-                />
-        </ScrollViewer>
-    </DockPanel>
+        <GridSplitter
+            Grid.Row="3"
+            Width="Auto"
+            Height="3"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Stretch"/>
+        <Grid HorizontalAlignment="Stretch" Grid.Row="4">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <DockPanel>
+                <TextBlock Text="Code" DockPanel.Dock="Top"/>
+                <Button
+                    Content="Execute"
+                    DockPanel.Dock="Bottom"
+                    Margin="3"
+                    HorizontalAlignment="Right"/>
+                <TextBox
+                    x:Name="textBoxCode"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Visible"
+                    AcceptsReturn="True"
+                    AcceptsTab="True"
+                    HorizontalAlignment="Stretch"/>
+            </DockPanel>
+            <GridSplitter
+                Grid.Column="1"
+                Height="Auto"
+                Width="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Stretch"/>
+            <DockPanel Grid.Column="2">
+                <TextBlock Text="Console" DockPanel.Dock="Top"/>
+                <TextBox
+                    x:Name="textBoxConsole"
+                    IsReadOnly="True"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Visible"
+                    AcceptsReturn="True"
+                    HorizontalAlignment="Stretch"/>
+            </DockPanel>
+        </Grid>
+    </Grid>
 </Window>

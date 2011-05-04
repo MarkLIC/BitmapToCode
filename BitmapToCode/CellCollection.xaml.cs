@@ -42,6 +42,34 @@ namespace BitmapToCode
             set { this.SetValue(cellDimensionProperty, value); }
         }
 
+        public ICommand ClearCommand
+        {
+            get
+            {
+                return new CellCollectionCommand(() =>
+                                                     {
+                                                         foreach (var cell in this.mainGrid.Children.OfType<Cell>())
+                                                         {
+                                                             cell.IsFilled = false;
+                                                         }
+                                                     });
+            }
+        }
+
+        public ICommand InvertCommand
+        {
+            get
+            {
+                return new CellCollectionCommand(() =>
+                                                     {
+                                                         foreach (var cell in this.mainGrid.Children.OfType<Cell>())
+                                                         {
+                                                             cell.IsFilled = !cell.IsFilled;
+                                                         }
+                                                     });
+            }
+        }
+
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             if (e.Property == numColumnsProperty)
@@ -127,15 +155,39 @@ namespace BitmapToCode
                 }
             }
 
-            foreach (var item in lookup.Where(x => x.Key.Item1 >=maxCol || x.Key.Item2 >= maxRow).SelectMany(x => x.AsEnumerable()))
+            foreach (var item in lookup.Where(x => x.Key.Item1 >= maxCol || x.Key.Item2 >= maxRow).SelectMany(x => x.AsEnumerable()))
             {
                 this.mainGrid.Children.Remove(item);
             }
 
-            foreach (var item in lookup)
+            System.Diagnostics.Debug.Assert(lookup.All(item => item.Count() == 1), "More than one element in cell");
+        }
+
+        private sealed class CellCollectionCommand : ICommand
+        {
+            private readonly Action action;
+
+            public CellCollectionCommand(Action action)
             {
-                System.Diagnostics.Debug.Assert(item.Count() == 1, "More than one element in cell");
+                if (action == null)
+                {
+                    throw new ArgumentNullException("action");
+                }
+
+                this.action = action;
             }
+
+            public void Execute(object parameter)
+            {
+                this.action();
+            }
+
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+
+            public event EventHandler CanExecuteChanged;
         }
     }
 }
