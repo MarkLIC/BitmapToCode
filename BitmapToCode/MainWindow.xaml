@@ -49,6 +49,7 @@
             <WrapPanel Orientation="Horizontal">
                 <Button Content="Clear All" Margin="10,2" Command="{Binding ElementName=cellCollection, Path=ClearCommand}"/>
                 <Button Content="Invert All" Margin="10,2" Command="{Binding ElementName=cellCollection, Path=InvertCommand}"/>
+                <Button Content="Dump" Margin="10,2" Click="Dump"/>
             </WrapPanel>
         </StackPanel>
         <GridSplitter
@@ -70,11 +71,14 @@
                 <TextBlock Text="Code" DockPanel.Dock="Top"/>
                 <Button
                     Content="Execute"
+                    Click="ExecuteScript"
                     DockPanel.Dock="Bottom"
                     Margin="3"
                     HorizontalAlignment="Right"/>
                 <TextBox
                     x:Name="textBoxCode"
+                    KeyDown="CodeKeyDown"
+                    FontFamily="Courier New"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Visible"
                     AcceptsReturn="True"
@@ -91,6 +95,7 @@
                 <TextBlock Text="Console" DockPanel.Dock="Top"/>
                 <TextBox
                     x:Name="textBoxConsole"
+                    FontFamily="Courier New"
                     IsReadOnly="True"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Visible"

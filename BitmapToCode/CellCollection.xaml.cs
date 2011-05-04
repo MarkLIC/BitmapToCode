@@ -16,6 +16,7 @@ namespace BitmapToCode
 {
     partial class CellCollection
     {
+        private readonly Dictionary<Tuple<int, int>, Cell> cells = new Dictionary<Tuple<int, int>, Cell>();
         public CellCollection()
         {
             InitializeComponent();
@@ -68,6 +69,12 @@ namespace BitmapToCode
                                                          }
                                                      });
             }
+        }
+
+        public Cell CellAt(int x, int y)
+        {
+            var key = new Tuple<int, int>(x, y);
+            return this.cells.ContainsKey(key) ? this.cells[key] : null;
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -137,13 +144,13 @@ namespace BitmapToCode
             int maxRow = this.mainGrid.RowDefinitions.Count;
             int maxCol = this.mainGrid.ColumnDefinitions.Count;
 
-            var lookup = this.mainGrid.Children.Cast<UIElement>().ToLookup(x => new Tuple<int, int>(Grid.GetColumn(x), Grid.GetRow(x)));
+            var existingChildren = this.mainGrid.Children.Cast<UIElement>().ToLookup(x => new Tuple<int, int>(Grid.GetColumn(x), Grid.GetRow(x)));
 
             for (int r = 0; r < maxRow; r++)
             {
                 for (int c = 0; c < maxCol; c++)
                 {
-                    if (lookup.Contains(new Tuple<int, int>(c, r)))
+                    if (existingChildren.Contains(new Tuple<int, int>(c, r)))
                     {
                         continue;
                     }
@@ -155,12 +162,19 @@ namespace BitmapToCode
                 }
             }
 
-            foreach (var item in lookup.Where(x => x.Key.Item1 >= maxCol || x.Key.Item2 >= maxRow).SelectMany(x => x.AsEnumerable()))
+            foreach (var item in existingChildren.Where(x => x.Key.Item1 >= maxCol || x.Key.Item2 >= maxRow).SelectMany(x => x.AsEnumerable()))
             {
                 this.mainGrid.Children.Remove(item);
             }
 
+            var lookup = this.mainGrid.Children.Cast<UIElement>().ToLookup(x => new Tuple<int, int>(Grid.GetColumn(x), Grid.GetRow(x)));
             System.Diagnostics.Debug.Assert(lookup.All(item => item.Count() == 1), "More than one element in cell");
+
+            this.cells.Clear();
+            foreach (var item in lookup)
+            {
+                this.cells[item.Key] = (Cell)item.Single();
+            }
         }
 
         private sealed class CellCollectionCommand : ICommand
@@ -187,7 +201,11 @@ namespace BitmapToCode
                 return true;
             }
 
-            public event EventHandler CanExecuteChanged;
+            event EventHandler ICommand.CanExecuteChanged
+            {
+                add { }
+                remove { }
+            }
         }
     }
 }
