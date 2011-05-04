@@ -46,6 +46,17 @@ namespace BitmapToCode
             engine.SetGlobalFunction("clearAll", new Action(() => this.cellCollection.ClearCommand.Execute(null)));
             engine.SetGlobalFunction("isFilled", new Func<int, int, bool>((x, y) => (this.cellCollection.CellAt(x, y) ?? new Cell()).IsFilled));
             engine.SetGlobalFunction("setFilled", new Action<int, int, bool>((x, y, fill) => (this.cellCollection.CellAt(x, y) ?? new Cell()).IsFilled = fill));
+            engine.SetGlobalFunction("setBorderColor", new Action<string>(s =>
+                                                                              {
+                                                                                  try
+                                                                                  {
+                                                                                      this.colorPickerBorder.SelectedColor = (Color)ColorConverter.ConvertFromString(s);
+                                                                                  }
+                                                                                  catch (FormatException ex)
+                                                                                  {
+                                                                                      throw new JavaScriptException(engine, "Error", "Cannot parse color: " + s, ex);
+                                                                                  }
+                                                                              }));
 
             try
             {
@@ -74,6 +85,7 @@ namespace BitmapToCode
             builder.AppendLine();
             builder.AppendLine("setColumns(" + (this.nudColumns.Value ?? 1).ToString(CultureInfo.InvariantCulture) + ")");
             builder.AppendLine("setRows(" + (this.nudRows.Value ?? 1).ToString(CultureInfo.InvariantCulture) + ")");
+            builder.AppendLine("setBorderColor('" + this.colorPickerBorder.SelectedColor + "')");
             builder.AppendLine();
             builder.AppendLine("clearAll()");
 
@@ -101,19 +113,6 @@ namespace BitmapToCode
             this.textBoxConsole.Text = builder.ToString();
         }
 
-        private sealed class NullableIntToUintConverterImpl : IValueConverter
-        {
-            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                return (uint)(value as int? ?? 1);
-            }
-
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                throw new NotSupportedException();
-            }
-        }
-
         private void ShowHelp(object sender, RoutedEventArgs e)
         {
             var builder = new StringBuilder();
@@ -130,8 +129,27 @@ namespace BitmapToCode
             builder.AppendLine("  clearAll(): Clears all of the pixels on the grid.");
             builder.AppendLine("  isFilled(int, int): Returns true or false indicating whether the cell at the given x, y coordinate is filled.");
             builder.AppendLine("  setFilled(int, int, bool): Sets the fill of the the cell at the given x, y coordinate to the given state.");
+            builder.AppendLine("  setBorderColor(string): Sets the cell border color to the given string in hex format.");
 
             MessageBox.Show(builder.ToString(), "Help");
+        }
+
+        private void BorderColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
+        {
+            CellDesigner.Instance.Border = new SolidColorBrush(this.colorPickerBorder.SelectedColor);
+        }
+
+        private sealed class NullableIntToUintConverterImpl : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                return (uint)(value as int? ?? 1);
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                throw new NotSupportedException();
+            }
         }
     }
 }

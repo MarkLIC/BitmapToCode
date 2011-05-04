@@ -3,14 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xtoolkit="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended"
         xmlns:local="clr-namespace:BitmapToCode"
-        Title="Bitmap to Code" Height="450" Width="500">
+        Title="Bitmap to Code" Height="450" Width="550">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="8*" MinHeight="25"/>
+            <RowDefinition Height="8*" MinHeight="55"/>
             <RowDefinition Height="3"/>
-            <RowDefinition Height="2*" MinHeight="25"/>
+            <RowDefinition Height="2*" MinHeight="55"/>
             <RowDefinition Height="3"/>
-            <RowDefinition Height="4*" MinHeight="25"/>
+            <RowDefinition Height="4*" MinHeight="55"/>
         </Grid.RowDefinitions>
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <local:CellCollection
@@ -28,23 +28,38 @@
             HorizontalAlignment="Stretch"/>
         <StackPanel Orientation="Vertical" Grid.Row="2">
             <WrapPanel Orientation="Horizontal">
-                <Label Content="Rows: "/>
-                <xtoolkit:IntegerUpDown
-                    x:Name="nudRows" x:FieldModifier="private"
-                    Margin="0,0,20,0"
-                    Value="32"
-                    Minimum="1" Maximum="1000"/>
-                <Label Content="Columns: "/>
-                <xtoolkit:IntegerUpDown
-                    x:Name="nudColumns" x:FieldModifier="private"
-                    Margin="0,0,20,0"
-                    Value="64"
-                    Minimum="1" Maximum="1000"/>
-                <Label Content="Cell length: "/>
-                <xtoolkit:IntegerUpDown
-                    x:Name="nudCellWidth" x:FieldModifier="private"
-                    Value="7"
-                    Minimum="2" Maximum="250"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Rows: "/>
+                    <xtoolkit:IntegerUpDown
+                        x:Name="nudRows" x:FieldModifier="private"
+                        Margin="0,0,20,0"
+                        Value="32"
+                        Minimum="1" Maximum="1000"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Columns: "/>
+                    <xtoolkit:IntegerUpDown
+                        x:Name="nudColumns" x:FieldModifier="private"
+                        Margin="0,0,20,0"
+                        Value="64"
+                        Minimum="1" Maximum="1000"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Cell length: "/>
+                    <xtoolkit:IntegerUpDown
+                        x:Name="nudCellWidth" x:FieldModifier="private"
+                        Value="7"
+                        Margin="0,0,20,0"
+                        Minimum="2" Maximum="250"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Border color: "/>
+                    <xtoolkit:ColorPicker
+                        x:Name="colorPickerBorder" x:FieldModifier="private"
+                        SelectedColor="#FF93C8C8"
+                        SelectedColorChanged="BorderColorChanged"
+                        Width="45"/>
+                </StackPanel>
             </WrapPanel>
             <WrapPanel Orientation="Horizontal">
                 <Button Content="Clear All" Margin="10,2" Command="{Binding ElementName=cellCollection, Path=ClearCommand}"/>

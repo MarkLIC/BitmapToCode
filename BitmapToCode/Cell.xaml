@@ -4,13 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BitmapToCode"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
              MinHeight="2" MinWidth="2"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Border
-        BorderBrush="#FF93C8C8" BorderThickness="1"
+        BorderBrush="{Binding Source={x:Static local:CellDesigner.Instance}, Path=Border}"
         MouseEnter="MouseEntered"
         MouseLeftButtonDown="LeftDown"
         MouseRightButtonDown="RightDown"
@@ -25,7 +26,11 @@
                     <DataTrigger Binding="{Binding ElementName=root, Path=IsFilled}" Value="False">
                         <Setter Property="Background" Value="White"/>
                     </DataTrigger>
+                    <DataTrigger Binding="{Binding Source={x:Static local:CellDesigner.Instance}, Path=Border.Color.A}" Value="0">
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </DataTrigger>
                 </Style.Triggers>
+                <Setter Property="BorderThickness" Value="1"/>
             </Style>
         </Border.Style>
     </Border>
