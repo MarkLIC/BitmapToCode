@@ -130,6 +130,8 @@ namespace BitmapToCode
             builder.AppendLine("  isFilled(int, int): Returns true or false indicating whether the cell at the given x, y coordinate is filled.");
             builder.AppendLine("  setFilled(int, int, bool): Sets the fill of the the cell at the given x, y coordinate to the given state.");
             builder.AppendLine("  setBorderColor(string): Sets the cell border color to the given string in hex format.");
+            builder.AppendLine();
+            builder.AppendLine("Quickly execute code by pressing ctrl-enter in the code text area.");
 
             MessageBox.Show(builder.ToString(), "Help");
         }
@@ -137,6 +139,16 @@ namespace BitmapToCode
         private void BorderColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
         {
             CellDesigner.Instance.Border = new SolidColorBrush(this.colorPickerBorder.SelectedColor);
+        }
+
+        private void ComboSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selection = e.AddedItems.Count > 0 ? (string)e.AddedItems[0] : null;
+            string preset = CodePresets.GetPreset(selection);
+            if (preset != null)
+            {
+                this.textBoxCode.Text = preset;
+            }
         }
 
         private sealed class NullableIntToUintConverterImpl : IValueConverter

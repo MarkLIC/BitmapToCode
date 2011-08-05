@@ -84,6 +84,7 @@
       <DependentUpon>CellCollection.xaml</DependentUpon>
     </Compile>
     <Compile Include="CellDesigner.cs" />
+    <Compile Include="CodePresets.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

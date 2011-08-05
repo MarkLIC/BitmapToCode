@@ -95,6 +95,12 @@
                         Click="ShowHelp"
                         DockPanel.Dock="Left"
                         Margin="3"/>
+                    <TextBlock Text="Load presets:" VerticalAlignment="Center" Margin="3"/>
+                    <ComboBox
+                        ItemsSource="{Binding Source={x:Static local:CodePresets.PresetKeys}}"
+                        SelectedIndex="0"
+                        VerticalContentAlignment="Center"
+                        SelectionChanged="ComboSelectionChanged"/>
                 </DockPanel>
                 <TextBox
                     x:Name="textBoxCode"
