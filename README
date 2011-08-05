@@ -1,0 +1,12 @@
+This project offers a simple bitmap drawing mechanism and a simple JavaScript
+API to access the bitmap data.
+
+This can be used to make simple drawings and then generate code based on the
+drawing.  One example of use would be to output code to re-generate the same
+image that can be pasted into a source file in a language that you want to
+target.
+
+To build, load BitmapToCode.sln in VS2010.  This project depends on the .NET 4
+framework.
+
+If you come up with any useful presets, fork the code and make a pull request!
